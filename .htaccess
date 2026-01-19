@@ -1,0 +1,55 @@
+# Apache Configuration for Crime Monitor
+
+# Enable URL rewriting
+RewriteEngine On
+
+# Prevent access to sensitive files
+<Files "config.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+<Files "database.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+<Files "functions.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Prevent access to database directory
+<Directory "database/">
+    Order Allow,Deny
+    Deny from all
+</Directory>
+
+# Prevent access to includes directory
+<Directory "includes/">
+    Order Allow,Deny
+    Deny from all
+</Directory>
+
+# Security headers
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-Frame-Options DENY
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# PHP settings
+<IfModule mod_php.c>
+    php_value upload_max_filesize 10M
+    php_value post_max_size 10M
+    php_value max_execution_time 300
+    php_value memory_limit 128M
+</IfModule>
+
+# Default index files
+DirectoryIndex index.php index.html
+
+# Error pages (optional)
+ErrorDocument 404 /public/404.html
+ErrorDocument 500 /public/500.html
